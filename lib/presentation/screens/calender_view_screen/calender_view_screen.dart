@@ -3,10 +3,11 @@ import 'package:event_calender/presentation/widgets/network_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../utils/snackbar_utils.dart';
+import '../../widgets/event_add_or_edit_bottom_sheet.dart';
+import '../../widgets/event_tile.dart';
 import 'calender_view_screen_controller.dart';
-import 'components/event_tile.dart';
 import 'components/calender.dart';
-import 'components/event_add_bottom_sheet.dart';
 
 class CalenderViewScreen extends StatelessWidget {
   const CalenderViewScreen({super.key});
@@ -18,22 +19,30 @@ class CalenderViewScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: InkWell(
-          child: const Icon(
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: whiteColor,
           ),
-          onTap: () {
-            Get.back();
-          },
         ),
         elevation: 0,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          screenController.clearData();
-          Get.bottomSheet(const EventAddBottomSheet(),
+        onPressed: () async {
+          Get.put(EventAddOrEditBottomSheetController()).clearData();
+          bool? result = await Get.bottomSheet(
+              EventAddOrEditBottomSheet(
+                date: screenController.date.value,
+                isAdd: true,
+              ),
               isScrollControlled: true);
+          if (result == true) {
+            showMessage("Event added successfully");
+            screenController.getData(isPull: true);
+          }
         },
         child: const Icon(Icons.add),
       ),
@@ -78,9 +87,7 @@ class CalenderViewScreen extends StatelessWidget {
                         Text(
                           "     __________",
                           style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w200),
+                              color: Colors.white, fontSize: 10, fontWeight: FontWeight.w200),
                         ),
                       ],
                     ),
@@ -91,6 +98,7 @@ class CalenderViewScreen extends StatelessWidget {
                   ...List.generate(
                     screenController.todayEvents.length,
                     (index) => EventTile(
+                      isFromHome: false,
                       event: screenController.todayEvents[index],
                     ),
                   ),

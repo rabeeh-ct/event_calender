@@ -154,71 +154,7 @@ class CalenderViewScreenController extends GetxController {
     return Future.value(true);
   }
 
-  bool dateEquality(DateTime date1, DateTime date2) {
-    return date1.day == date2.day &&
-        date1.month == date2.month &&
-        date1.year == date2.year;
-  }
 
-  // ======================================================================================= //
-
-  final AddEventUseCase _addEventUseCase = Get.put(AddEventUseCase());
-  final _deleteEventsUseCase =Get.put(DeleteEventsUseCase());
-  final GlobalKey<FormState> addEventFromKey =
-      GlobalKey(debugLabel: "addEventFromKey");
-
-  // final TimeOfDay? eventTime;
-  final TextEditingController eventTitleCtr = TextEditingController();
-  final TextEditingController eventTimeCtr = TextEditingController();
-  final TextEditingController eventDateCtr = TextEditingController();
-
-  List<RepeatModeEntity> repeatModes = [
-    RepeatModeEntity(title: "Daily", id: 0),
-    RepeatModeEntity(title: "Weekly", id: 1),
-    RepeatModeEntity(title: "Monthly", id: 2),
-  ];
-  Rxn<RepeatModeEntity> selectedRepeatMode = Rxn();
-
-  Rx<bool> buttonLoading = false.obs;
-
-  addEvent() async {
-    buttonLoading(true);
-    EventEntity params = EventEntity(
-      date: date.value,
-      time: eventTimeCtr.text,
-      title: eventTitleCtr.text.trim(),
-      repeatType: selectedRepeatMode.value!.id,
-    );
-    final response = await _addEventUseCase(params);
-    response.fold((l) {
-      return l.handleError();
-    }, (r) async {
-      Get.back();
-      showMessage("Event added successfully");
-      clearData();
-    });
-    buttonLoading(false);
-  }
-
-  deleteEvent(int index) async {
-    // buttonLoading(true);
-
-    final response = await _deleteEventsUseCase(index);
-    response.fold((l) {
-      return l.handleError();
-    }, (r) async {
-      getData(isPull: true);
-      showMessage("Event deleted successfully");
-    });
-    // buttonLoading(false);
-  }
-
-  clearData() {
-    eventTitleCtr.clear();
-    eventTimeCtr.clear();
-    eventDateCtr.clear();
-    selectedRepeatMode.value = null;
-  }
 }
 
 class RepeatModeEntity {
@@ -226,4 +162,16 @@ class RepeatModeEntity {
   final int id;
 
   RepeatModeEntity({required this.title, required this.id});
+}
+
+List<RepeatModeEntity> repeatModes = [
+  RepeatModeEntity(title: "Daily", id: 0),
+  RepeatModeEntity(title: "Weekly", id: 1),
+  RepeatModeEntity(title: "Monthly", id: 2),
+];
+
+bool dateEquality(DateTime date1, DateTime date2) {
+  return date1.day == date2.day &&
+      date1.month == date2.month &&
+      date1.year == date2.year;
 }

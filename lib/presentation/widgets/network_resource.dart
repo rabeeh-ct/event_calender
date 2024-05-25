@@ -1,3 +1,4 @@
+import 'package:event_calender/presentation/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -36,12 +37,12 @@ class NetworkResource extends StatelessWidget {
 }
 
 class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({Key? key}) : super(key: key);
+  const LoadingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: CupertinoActivityIndicator(radius: 15),
+      child: CupertinoActivityIndicator(radius: 15,color: whiteColor,),
     );
   }
 }

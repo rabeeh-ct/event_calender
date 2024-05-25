@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:event_calender/data/models/event_model.dart';
 import 'package:event_calender/domain/entities/event_entity.dart';
+import 'package:event_calender/utils/debug_utils.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
 
@@ -31,6 +32,7 @@ class DataRepositoryImpl implements DataRepository {
   @override
   Future<Either<AppError, void>> editEvent(EventEntity params) async {
     try {
+      consoleLog("index ====== ${params.indexId}");
       final response =
           await localDataSource.editEvent(EventModel.fromEntity(params));
       return Right(response);

@@ -83,6 +83,8 @@ class Calender extends StatelessWidget {
                   },
                   itemBuilder: (context, index) => Obx(() {
                     return GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
                       itemCount: screenController.dateList.length,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 7,
@@ -96,13 +98,13 @@ class Calender extends StatelessWidget {
                             height: double.maxFinite,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: screenController.dateEquality(
+                              color: dateEquality(
                                       screenController.dateList[index],
                                       screenController.date.value)
                                   ? primaryColor
                                   : null,
                               shape: BoxShape.circle,
-                              border: screenController.dateEquality(
+                              border: dateEquality(
                                       screenController.dateList[index], DateTime.now())
                                   ? Border.all(color: primaryColor)
                                   : null,
@@ -113,7 +115,7 @@ class Calender extends StatelessWidget {
                                       screenController.date.value.month
                                   ? TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: screenController.dateEquality(
+                                      color: dateEquality(
                                               screenController.dateList[index],
                                               screenController.date.value)
                                           ? whiteColor

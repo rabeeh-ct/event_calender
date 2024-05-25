@@ -1,5 +1,7 @@
+import 'package:event_calender/presentation/widgets/network_resource.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'components/calender_home.dart';
 import 'home_screen_controller.dart';
 
@@ -15,7 +17,15 @@ class HomeScreen extends StatelessWidget {
         // leading: const Icon(Icons.arrow_back_ios),
         elevation: 0,
       ),
-      body: const CalenderHome(),
+      body: Obx(() {
+          return NetworkResource(
+            appError: screenController.appError,
+            loading: screenController.pageLoading.value,
+            retry: screenController.getData,
+            child: const CalenderHome(),
+          );
+        }
+      ),
     );
   }
 }
